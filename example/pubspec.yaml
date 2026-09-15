@@ -1,0 +1,18 @@
+name: carp_aware_package_example
+description: A simple example of using the CARP AWARE (Apple Watch) Package
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.29.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  carp_aware_package:
+    path: ../
+
+flutter:
+  uses-material-design: true

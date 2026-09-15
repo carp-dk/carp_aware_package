@@ -1,0 +1,177 @@
+{
+ "applicationData": {
+  "protocolApiLevel": "2.0",
+  "studyDescription": {
+   "__type": "StudyDescription",
+   "title": "Apple Watch package test",
+   "description": "Testing the Apple Watch sampling package with a simple study protocol."
+  }
+ },
+ "id": "9eb1ec9d-40b4-451d-8737-91cf2612b5c8",
+ "createdOn": "2026-09-15T09:30:15.663202Z",
+ "version": 0,
+ "ownerId": "alex@uni.dk",
+ "name": "Apple Watch package test",
+ "participantRoles": [],
+ "primaryDevices": [
+  {
+   "__type": "dk.carp.cams.devices.Smartphone",
+   "roleName": "iPhone 16",
+   "isOptional": false,
+   "defaultSamplingConfiguration": {},
+   "isPrimaryDevice": true
+  }
+ ],
+ "connectedDevices": [
+  {
+   "__type": "dk.carp.cams.devices.AppleWatchDevice",
+   "roleName": "Apple Watch",
+   "isOptional": true,
+   "defaultSamplingConfiguration": {},
+   "motionSamplingRate": 25,
+   "accelerometerEnabled": true,
+   "deviceMotionEnabled": true,
+   "motionEnabled": true,
+   "batteryEnabled": true,
+   "deviceInfoEnabled": true,
+   "heartRateEnabled": true,
+   "locationEnabled": false,
+   "headingEnabled": false,
+   "bluetoothEnabled": false,
+   "audioEnabled": true,
+   "ambientNoiseEnabled": true,
+   "audioClassificationEnabled": true,
+   "audioDutyCycleEnabled": true,
+   "audioActiveDuration": 60000000,
+   "audioRestDuration": 180000000,
+   "fileTransferInterval": 600000000,
+   "transferMode": "incremental",
+   "deleteAfterTransfer": true,
+   "backgroundSessionType": "microphone",
+   "saveToLocalAwareDatabase": false,
+   "enableNativeLogging": false
+  }
+ ],
+ "connections": [
+  {
+   "roleName": "Apple Watch",
+   "connectedToRoleName": "iPhone 16"
+  }
+ ],
+ "assignedDevices": {},
+ "tasks": [
+  {
+   "__type": "dk.cachet.carp.common.application.tasks.MonitoringTask",
+   "name": "Monitoring iPhone 16",
+   "measures": [
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.error"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.triggeredtask"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.completedtask"
+    }
+   ]
+  },
+  {
+   "__type": "dk.cachet.carp.common.application.tasks.MonitoringTask",
+   "name": "Monitoring Apple Watch",
+   "measures": [
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.error"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.triggeredtask"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.cachet.carp.completedtask"
+    }
+   ]
+  },
+  {
+   "__type": "dk.cachet.carp.common.application.tasks.BackgroundTask",
+   "name": "Task #8",
+   "measures": [
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.motion"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.heartrate"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.battery"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.location"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.heading"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.bluetooth"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.ambientnoise"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.audiolabel"
+    },
+    {
+     "__type": "dk.cachet.carp.common.application.tasks.Measure.DataStream",
+     "type": "dk.carp.watch.aware.device"
+    }
+   ]
+  }
+ ],
+ "triggers": {
+  "0": {
+   "__type": "dk.cachet.carp.common.application.triggers.NoOpTrigger",
+   "sourceDeviceRoleName": "iPhone 16"
+  },
+  "1": {
+   "__type": "dk.cachet.carp.common.application.triggers.NoOpTrigger",
+   "sourceDeviceRoleName": "Apple Watch"
+  },
+  "2": {
+   "__type": "dk.cachet.carp.common.application.triggers.ImmediateTrigger",
+   "sourceDeviceRoleName": "Apple Watch"
+  }
+ },
+ "taskControls": [
+  {
+   "triggerId": 0,
+   "taskName": "Monitoring iPhone 16",
+   "destinationDeviceRoleName": "iPhone 16",
+   "control": "Start"
+  },
+  {
+   "triggerId": 1,
+   "taskName": "Monitoring Apple Watch",
+   "destinationDeviceRoleName": "Apple Watch",
+   "control": "Start"
+  },
+  {
+   "triggerId": 2,
+   "taskName": "Task #8",
+   "destinationDeviceRoleName": "Apple Watch",
+   "control": "Start"
+  }
+ ],
+ "expectedParticipantData": []
+}

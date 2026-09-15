@@ -1,0 +1,54 @@
+name: carp_aware_package
+version: 1.0.0
+description: The CARP AWARE sampling package. Samples passive sensor data from an Apple Watch (watchOS) using the AWARE watchOS sensing framework.
+homepage: https://github.com/carp-dk/carp.sensing-flutter
+repository: https://github.com/carp-dk/carp_aware_package
+issue_tracker: https://github.com/cph-cachet/carp.sensing-flutter/issues
+
+documentation: https://docs.carp.dk/carp-mobile-sensing/
+topics:
+  - mobile-sensing
+  - mobile-health
+  - sensors
+  - digital-phenotyping
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+  # Swift Package Manager support is required by the iOS side of this plugin.
+  flutter: ">=3.29.0"
+
+# The AWARE watchOS framework is an Apple-only framework.
+platforms:
+  ios:
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  carp_serializable: ^3.0.0
+  carp_core: ^2.2.0
+  carp_mobile_sensing: ^2.2.0
+
+  json_annotation: ^4.8.0
+
+# Overriding carp libraries to use the local copy
+# Remove this before release of package
+dependency_overrides:
+#   carp_serializable:
+#     path: ../../carp_serializable/
+#   carp_core:
+#     path: ../../carp_core/
+#   carp_mobile_sensing:
+#     path: ../../carp_mobile_sensing/
+
+dev_dependencies:
+  flutter_lints: any
+  build_runner: any
+  json_serializable: any
+  test: any
+
+flutter:
+  plugin:
+    platforms:
+      ios:
+        pluginClass: CarpAwarePlugin

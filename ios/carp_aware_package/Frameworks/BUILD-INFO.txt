@@ -1,0 +1,19 @@
+AWARE Apple Watch XCFrameworks
+
+Built from : https://github.com/awareframework/com.awareframework.ios.sensor.applewatch
+Revision   : e0eb719eb3a56beeda58688c0c646078aa11ad21
+Version    : 1.6.0-1-ge0eb719
+Xcode      : Xcode 27.0
+Swift      : swift-driver version: 1.168.6 Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)
+
+Compiled against:
+  com.awareframework.ios.core        1.6.0
+  datacompression                    3.9.0
+  grdb.swift                         7.11.1
+  reachability.swift                 5.2.4
+  swiftyjson                         5.0.2
+
+Those packages are not baked into the binaries - a consumer has to resolve the
+same major versions, and build with this Xcode release or newer.
+
+Rebuild with: tool/build_xcframeworks.sh

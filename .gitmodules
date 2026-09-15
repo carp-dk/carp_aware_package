@@ -1,0 +1,3 @@
+[submodule "com.awareframework.ios.sensor.applewatch"]
+	path = com.awareframework.ios.sensor.applewatch
+	url = https://github.com/awareframework/com.awareframework.ios.sensor.applewatch

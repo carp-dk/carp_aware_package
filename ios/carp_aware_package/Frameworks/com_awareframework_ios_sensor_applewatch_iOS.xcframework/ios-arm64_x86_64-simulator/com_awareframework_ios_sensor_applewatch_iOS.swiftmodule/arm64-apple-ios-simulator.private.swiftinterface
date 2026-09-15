@@ -1,0 +1,131 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 effective-5.10 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)
+// swift-module-flags: -target arm64-apple-ios16.0-simulator -enable-objc-interop -enable-library-evolution -language-mode 5 -O -enable-experimental-feature DebugDescriptionMacro -module-name com_awareframework_ios_sensor_applewatch_iOS -package-name awareapplewatch
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import DataCompression
+import Foundation
+import Swift
+import WatchConnectivity
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import com_awareframework_ios_core
+import com_awareframework_ios_sensor_applewatch_shared
+@objc public class AppleWatchSensor : com_awareframework_ios_core::AwareSensor {
+  public static let TAG: Swift::String
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_iOS::AppleWatchSensor.com_awareframework_ios_sensor_applewatch_iOS::Config
+  public var isWatchCollectingData: Swift::Bool
+  public var messageHandler: ((_ message: [Swift::String : Any]) -> Swift::Void)?
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var fileTransferIntervalSeconds: Swift::Double
+    public var motionSensorHz: Swift::Int
+    public var watchMotionAccelerometerEnabled: Swift::Bool
+    public var watchMotionDeviceMotionEnabled: Swift::Bool
+    public var sensorObserver: (any com_awareframework_ios_sensor_applewatch_iOS::AppleWatchObserver)?
+    public var keepOriginalFileFromWatch: Swift::Bool
+    public var autoSaveReceivedData: Swift::Bool
+    public var watchMotionEnabled: Swift::Bool
+    public var watchBatteryEnabled: Swift::Bool
+    public var watchDeviceEnabled: Swift::Bool
+    public var watchHealthKitEnabled: Swift::Bool
+    public var watchLocationEnabled: Swift::Bool
+    public var watchHeadingEnabled: Swift::Bool
+    public var watchAudioEnabled: Swift::Bool
+    public var watchUWBEnabled: Swift::Bool
+    public var watchBluetoothEnabled: Swift::Bool
+    public var watchBackgroundSessionType: com_awareframework_ios_sensor_applewatch_shared::AWBackgroundSessionType
+    public var watchAudioAmbientNoiseEnabled: Swift::Bool
+    public var watchAudioClassificationEnabled: Swift::Bool
+    public var watchAudioDutyCycleEnabled: Swift::Bool
+    public var watchAudioActiveDuration: Swift::Double
+    public var watchAudioRestDuration: Swift::Double
+    public var receivedDataHandler: ((_ tableName: Swift::String, _ chunkIndex: Swift::Int, _ totalChunks: Swift::Int, _ records: [[Swift::String : Any]]) -> Swift::Void)?
+    public var fileTransferStatusHandler: ((_ tableName: Swift::String, _ chunkIndex: Swift::Int, _ totalChunks: Swift::Int, _ fileName: Swift::String, _ state: Swift::String, _ errorMessage: Swift::String?) -> Swift::Void)?
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_iOS::AppleWatchSensor.com_awareframework_ios_sensor_applewatch_iOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_iOS::AppleWatchSensor.com_awareframework_ios_sensor_applewatch_iOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  override public func set(label: Swift::String)
+  public func createFileUrl(fileName: Swift::String) -> Foundation::URL
+  public func didReceive(file: WatchConnectivity::WCSessionFile)
+  public func didReceive(message: [Swift::String : Any], replyHandler: @escaping ([Swift::String : Any]) -> Swift::Void)
+  public func communicationDebugStatus() -> com_awareframework_ios_sensor_applewatch_shared::AWCommunicationDebugStatus
+  public func requestManualDeviceIdExchange(_ handler: @escaping (Swift::Result<Swift::String, any Swift::Error>) -> Swift::Void)
+  @objc deinit
+}
+public protocol AppleWatchObserver {
+  func onMotionChanged(data: Swift::Dictionary<Swift::String, Any>)
+  func onAudioChanged(data: Swift::Dictionary<Swift::String, Any>)
+  func onAudioFileReceived(data: Foundation::URL)
+  func onHeartRateChanged(data: Swift::Dictionary<Swift::String, Any>)
+  func didReceive(file: Foundation::URL)
+}
+extension Foundation::NSNotification.Foundation::Name {
+  public static let actionAwareAppleWatch: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchStart: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchStop: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSync: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSetLabel: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletion: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncProgress: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchRunning: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncMotion: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncNoise: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncAudioClass: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncBluetooth: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncHR: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncLocation: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncBattery: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncHeading: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionMotion: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionNoise: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionAudioClass: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionBluetooth: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionHR: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionLocation: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionBattery: Foundation::Notification.Foundation::Name
+  public static let actionAwareAppleWatchSyncCompletionHeading: Foundation::Notification.Foundation::Name
+}
+extension com_awareframework_ios_sensor_applewatch_iOS::AppleWatchSensor {
+  public static let ACTION_AWARE_APPLEWATCH: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_START: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_STOP: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SET_LABEL: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_PROGRESS: Swift::String
+  public static var EXTRA_LABEL: Swift::String
+  public static let EXTRA_STATUS: Swift::String
+  public static let EXTRA_ERROR: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_RUNNING: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_MOTION: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_NOISE: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_AUDIOCLASS: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_BLUETOOTH: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_HR: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_LOCATION: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_BATTERY: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_HEADING: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_MOTION: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_NOISE: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_AUDIOCLASS: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_BLUETOOTH: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_HR: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_LOCATION: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_BATTERY: Swift::String
+  public static let ACTION_AWARE_APPLEWATCH_SYNC_COMPLETION_HEADING: Swift::String
+}
+extension com_awareframework_ios_sensor_applewatch_iOS::AppleWatchSensor : WatchConnectivity::WCSessionDelegate {
+  @objc dynamic public func session(_ session: WatchConnectivity::WCSession, activationDidCompleteWith activationState: WatchConnectivity::WCSessionActivationState, error: (any Swift::Error)?)
+  @objc dynamic public func sessionDidBecomeInactive(_ session: WatchConnectivity::WCSession)
+  @objc dynamic public func sessionDidDeactivate(_ session: WatchConnectivity::WCSession)
+  @objc dynamic public func session(_ session: WatchConnectivity::WCSession, didReceive file: WatchConnectivity::WCSessionFile)
+  @objc dynamic public func session(_ session: WatchConnectivity::WCSession, didReceiveMessage message: [Swift::String : Any])
+  @objc dynamic public func session(_ session: WatchConnectivity::WCSession, didReceiveApplicationContext applicationContext: [Swift::String : Any])
+  @objc dynamic public func session(_ session: WatchConnectivity::WCSession, didReceiveMessage message: [Swift::String : Any], replyHandler: @escaping ([Swift::String : Any]) -> Swift::Void)
+}

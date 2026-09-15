@@ -1,0 +1,259 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 effective-5.10 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)
+// swift-module-flags: -target arm64-apple-ios16.0 -enable-objc-interop -enable-library-evolution -language-mode 5 -O -enable-experimental-feature DebugDescriptionMacro -module-name com_awareframework_ios_sensor_applewatch_shared -package-name awareapplewatch
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import Foundation
+import GRDB
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import com_awareframework_ios_core
+public enum AWBackgroundSessionType : Swift::String, Swift::CaseIterable, Swift::Identifiable, Swift::Hashable {
+  case none
+  case workout
+  case microphone
+  public var id: Swift::String {
+    get
+  }
+  public var title: Swift::String {
+    get
+  }
+  public init(rawValueOrDefault rawValue: Swift::String?)
+  public init?(rawValue: Swift::String)
+  public typealias AllCases = [com_awareframework_ios_sensor_applewatch_shared::AWBackgroundSessionType]
+  public typealias ID = Swift::String
+  public typealias RawValue = Swift::String
+  nonisolated public static var allCases: [com_awareframework_ios_sensor_applewatch_shared::AWBackgroundSessionType] {
+    get
+  }
+  public var rawValue: Swift::String {
+    get
+  }
+}
+public struct AWCommunicationDebugStatus : Swift::Equatable {
+  public let isSupported: Swift::Bool
+  public let activationState: Swift::String
+  public let isReachable: Swift::Bool
+  public let hasContentPending: Swift::Bool
+  public let outstandingFileTransferCount: Swift::Int
+  public let outstandingUserInfoTransferCount: Swift::Int
+  public let localDeviceId: Swift::String
+  public let pairedDeviceId: Swift::String?
+  public let lastMessageAt: Foundation::Date?
+  public let lastFileTransferAt: Foundation::Date?
+  public let lastError: Swift::String?
+  public init(isSupported: Swift::Bool, activationState: Swift::String, isReachable: Swift::Bool, hasContentPending: Swift::Bool, outstandingFileTransferCount: Swift::Int, outstandingUserInfoTransferCount: Swift::Int, localDeviceId: Swift::String, pairedDeviceId: Swift::String?, lastMessageAt: Foundation::Date?, lastFileTransferAt: Foundation::Date?, lastError: Swift::String?)
+  public static func == (a: com_awareframework_ios_sensor_applewatch_shared::AWCommunicationDebugStatus, b: com_awareframework_ios_sensor_applewatch_shared::AWCommunicationDebugStatus) -> Swift::Bool
+}
+public struct AWAmbientNoiseData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var db: Swift::Double
+  public init(timestamp: Swift::Int64, db: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue)
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWAudioLabelData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var audioLabel: Swift::String
+  public var confidence: Swift::Double
+  public init(timestamp: Swift::Int64, audioLabel: Swift::String, confidence: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWBatterySensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var batteryLevel: Swift::Double
+  public var batteryState: Swift::Int
+  public init(timestamp: Swift::Int64, batteryLavel: Swift::Double, batteryState: Swift::Int, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWBluetoothSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var identifier: Swift::String
+  public var name: Swift::String
+  public var rssi: Swift::Double
+  public init(timestamp: Swift::Int64, identifier: Swift::String, name: Swift::String, rssi: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWDeviceSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var pairedIosDeviceId: Swift::String
+  public var name: Swift::String
+  public var model: Swift::String
+  public var systemName: Swift::String
+  public var systemVersion: Swift::String
+  public var preferredContentSizeCategory: Swift::String
+  public init(timestamp: Swift::Int64, pairedIosDeviceId: Swift::String, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWHeadingSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public static let tableName: Swift::String
+  public var trueHeading: Swift::Double
+  public var magneticHeading: Swift::Double
+  public var headingAccuracy: Swift::Double
+  public var x: Swift::Double
+  public var y: Swift::Double
+  public var z: Swift::Double
+  public init(timestamp: Swift::Int64, trueHeading: Swift::Double, magneticHeading: Swift::Double, headingAccuracy: Swift::Double, x: Swift::Double, y: Swift::Double, z: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public func toDictionary() -> [Swift::String : Any]
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWHeartRateSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var hr: Swift::Double
+  public init(timestamp: Swift::Int64, hr: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWLocationSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var latitude: Swift::Double
+  public var longitude: Swift::Double
+  public var altitude: Swift::Double
+  public var ellipsoidalAltitude: Swift::Double
+  public var horizontalAccuracy: Swift::Double
+  public var verticalAccuracy: Swift::Double
+  public var speed: Swift::Double
+  public var speedAccuracy: Swift::Double
+  public var course: Swift::Double
+  public var courseAccuracy: Swift::Double
+  public init(timestamp: Swift::Int64, latitude: Swift::Double, longitude: Swift::Double, altitude: Swift::Double, ellipsoidalAltitude: Swift::Double, horizontalAccuracy: Swift::Double, verticalAccuracy: Swift::Double, speed: Swift::Double, speedAccuracy: Swift::Double, course: Swift::Double, courseAccuracy: Swift::Double, label: Swift::String)
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+public struct AWMotionSensorData : com_awareframework_ios_core::BaseDbModelSQLite {
+  public var timezone: Swift::Int
+  public var os: Swift::String
+  public var jsonVersion: Swift::Int
+  public var id: Swift::Int64?
+  public var timestamp: Swift::Int64
+  public var deviceId: Swift::String
+  public var label: Swift::String
+  public static let databaseTableName: Swift::String
+  public var accX: Swift::Double
+  public var accY: Swift::Double
+  public var accZ: Swift::Double
+  public var roll: Swift::Double
+  public var pitch: Swift::Double
+  public var yaw: Swift::Double
+  public var gravityX: Swift::Double
+  public var gravityY: Swift::Double
+  public var gravityZ: Swift::Double
+  public var rotationX: Swift::Double
+  public var rotationY: Swift::Double
+  public var rotationZ: Swift::Double
+  public var userAccX: Swift::Double
+  public var userAccY: Swift::Double
+  public var userAccZ: Swift::Double
+  public init(timestamp: Swift::Int64, accX: Swift::Double, accY: Swift::Double, accZ: Swift::Double, roll: Swift::Double, pitch: Swift::Double, yaw: Swift::Double, gravityX: Swift::Double, gravityY: Swift::Double, gravityZ: Swift::Double, rotationX: Swift::Double, rotationY: Swift::Double, rotationZ: Swift::Double, userAccX: Swift::Double, userAccY: Swift::Double, userAccZ: Swift::Double, label: Swift::String = "")
+  public init(_ dict: Swift::Dictionary<Swift::String, Any>)
+  public static func createTable(queue: GRDB::DatabaseQueue) throws
+  public func toDictionary() -> Swift::Dictionary<Swift::String, Any>
+  public typealias Columns = Swift::Never
+  public typealias DatabaseComponents = Swift::Never.Type
+  public func encode(to encoder: any Swift::Encoder) throws
+  public init(from decoder: any Swift::Decoder) throws
+}
+extension com_awareframework_ios_sensor_applewatch_shared::AWBackgroundSessionType : Swift::RawRepresentable {}

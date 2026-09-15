@@ -1,0 +1,595 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 effective-5.10 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)
+// swift-module-flags: -target x86_64-apple-watchos9.0-simulator -enable-objc-interop -enable-library-evolution -language-mode 5 -O -enable-experimental-feature DebugDescriptionMacro -module-name com_awareframework_ios_sensor_applewatch_watchOS -package-name awareapplewatch
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import AVFoundation
+import Accelerate
+import Combine
+import CoreBluetooth
+import CoreLocation
+import CoreML
+import CoreMotion
+import DataCompression
+import Foundation
+import HealthKit
+import MediaPlayer
+import SoundAnalysis
+import Swift
+import SwiftUI
+import UIKit
+import UserNotifications
+import WatchConnectivity
+import WatchKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import _WatchKit_SwiftUI
+import com_awareframework_ios_core
+import com_awareframework_ios_sensor_applewatch_shared
+@objc public class AWAmbientNoiseSensor : com_awareframework_ios_core::AwareSensor {
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  override public func set(label: Swift::String)
+  @objc deinit
+}
+@objc public class AWAudioLabelSensor : com_awareframework_ios_core::AwareSensor {
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  override public func set(label: Swift::String)
+  @objc deinit
+}
+public struct AWDecibelLinePoint {
+  public var date: Foundation::Date
+  public var value: Swift::Double
+}
+public struct AWAudioClassPoint {
+  public var family: Swift::String
+  public var date: Foundation::Date
+  public var confidence: Swift::Double
+}
+public enum AWAudioDutyCyclePhase {
+  case active
+  case rest
+  public static func == (a: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCyclePhase, b: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCyclePhase) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+public struct AWAudioDutyCycleStatus {
+  public let phase: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCyclePhase
+  public let phaseEndsAt: Foundation::Date?
+  public let activeDuration: Foundation::TimeInterval
+  public let restDuration: Foundation::TimeInterval
+  public var isActive: Swift::Bool {
+    get
+  }
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor : SoundAnalysis::SNResultsObserving {
+  @objc final public func request(_ request: any SoundAnalysis::SNRequest, didProduce result: any SoundAnalysis::SNResult)
+  @objc final public func request(_ request: any SoundAnalysis::SNRequest, didFailWithError error: any Swift::Error)
+  @objc final public func requestDidComplete(_ request: any SoundAnalysis::SNRequest)
+}
+@objc final public class AWAudioSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWDecibelLinePoint]> @_projectedValueProperty($decibels) final public var decibels: [com_awareframework_ios_sensor_applewatch_watchOS::AWDecibelLinePoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  final public var $decibels: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWDecibelLinePoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWAudioClassPoint]> @_projectedValueProperty($audioClasses) final public var audioClasses: [com_awareframework_ios_sensor_applewatch_watchOS::AWAudioClassPoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  final public var $audioClasses: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWAudioClassPoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  final public var audioLabelSensor: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioLabelSensor?
+  final public var ambientNoiseSensor: com_awareframework_ios_sensor_applewatch_watchOS::AWAmbientNoiseSensor?
+  final public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var onBus: Swift::Int
+    public var bufferSize: Swift::UInt32
+    public var interval: Swift::Double?
+    public var audioRecordFormat: CoreAudioTypes::AudioFormatID
+    public var audioRecordSampleRate: Swift::Int
+    public var audioRecordQuality: AVFAudio::AVAudioQuality
+    public var audioRecordNumberOfChannels: Swift::Int
+    public var audioBufferHandler: AVFAudio::AVAudioNodeTapBlock?
+    public var audioClassifierModel: CoreML::MLModel?
+    public var autoFileTransferInterval: Swift::Int
+    public var activateAmbientNoiseSensor: Swift::Bool
+    public var activateRawAudioSensor: Swift::Bool
+    public var activateAudioClassificationSensor: Swift::Bool
+    public var dutyCycleEnabled: Swift::Bool
+    public var activeDuration: Swift::Double
+    public var restDuration: Swift::Double
+    public var storeOnlyTopK: Swift::Int?
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  @objc deinit
+  override final public func start()
+  override final public func stop()
+  @objc override final public func sync(force: Swift::Bool = false)
+  final public func currentDutyCycleStatus(now: Foundation::Date = Date()) -> com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCycleStatus?
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWAudioSensor : AVFAudio::AVAudioRecorderDelegate {
+  @objc final public func audioRecorderDidFinishRecording(_ recorder: AVFAudio::AVAudioRecorder, successfully flag: Swift::Bool)
+}
+@objc public class AWBatterySensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWBatteryLinePoint]> @_projectedValueProperty($batteryLevels) public var batteryLevels: [com_awareframework_ios_sensor_applewatch_watchOS::AWBatteryLinePoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $batteryLevels: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWBatteryLinePoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWBatterySensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var intervalSeconds: Swift::Double
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWBatterySensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWBatterySensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+public struct AWBatteryLinePoint {
+  public var date: Foundation::Date
+  public var value: Swift::Double
+}
+@objc public class AWBluetoothSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWBluetoothSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var sensingDurationSeconds: Swift::Double
+    public var sleepDurationSeconds: Swift::Double
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWBluetoothSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWBluetoothSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWBluetoothSensor : CoreBluetooth::CBCentralManagerDelegate {
+  @objc dynamic public func centralManagerDidUpdateState(_ central: CoreBluetooth::CBCentralManager)
+  @objc dynamic public func centralManager(_ central: CoreBluetooth::CBCentralManager, didDiscover peripheral: CoreBluetooth::CBPeripheral, advertisementData: [Swift::String : Any], rssi RSSI: Foundation::NSNumber)
+  @objc dynamic public func centralManager(_ central: CoreBluetooth::CBCentralManager, didConnect peripheral: CoreBluetooth::CBPeripheral)
+  @objc dynamic public func centralManager(_ central: CoreBluetooth::CBCentralManager, didFailToConnect peripheral: CoreBluetooth::CBPeripheral, error: (any Swift::Error)?)
+  @objc dynamic public func centralManager(_ central: CoreBluetooth::CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth::CBPeripheral, error: (any Swift::Error)?)
+}
+public enum AWTransferMode {
+  case all
+  case incremental
+  public static func == (a: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferMode, b: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferMode) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+public enum AWTransferState : Swift::Equatable {
+  case idle
+  case preparing(sensor: Swift::String)
+  case transferring
+  case completed
+  case failed(message: Swift::String)
+  public var displayText: Swift::String {
+    get
+  }
+  public var isActive: Swift::Bool {
+    get
+  }
+  public static func == (a: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferState, b: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferState) -> Swift::Bool
+}
+public struct AWTransferItem : Swift::Identifiable {
+  public let id: Foundation::UUID
+  public let fileName: Swift::String
+  public var progress: Swift::Double
+  public var isCompleted: Swift::Bool
+  public var isCancelled: Swift::Bool
+  public var isPaused: Swift::Bool
+  public typealias ID = Foundation::UUID
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class AWDataTransferManager : ObjectiveC::NSObject, Foundation::ObservableObject {
+  public static let shared: com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager
+  @Combine::Published<com_awareframework_ios_sensor_applewatch_watchOS::AWTransferState> @_projectedValueProperty($state) public var state: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferState {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $state: Combine::Published<com_awareframework_ios_sensor_applewatch_watchOS::AWTransferState>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<Swift::Int> @_projectedValueProperty($totalChunks) public var totalChunks: Swift::Int {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $totalChunks: Combine::Published<Swift::Int>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<Swift::Int> @_projectedValueProperty($completedChunks) public var completedChunks: Swift::Int {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $completedChunks: Combine::Published<Swift::Int>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<Swift::Double> @_projectedValueProperty($overallProgress) public var overallProgress: Swift::Double {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $overallProgress: Combine::Published<Swift::Double>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWTransferItem]> @_projectedValueProperty($transfers) public var transfers: [com_awareframework_ios_sensor_applewatch_watchOS::AWTransferItem] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $transfers: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWTransferItem]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<Swift::String?> @_projectedValueProperty($lastError) public var lastError: Swift::String? {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $lastError: Combine::Published<Swift::String?>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var recordsPerChunk: Swift::Int
+  public var debug: Swift::Bool
+  public var useColumnarFormat: Swift::Bool
+  public var transferMode: com_awareframework_ios_sensor_applewatch_watchOS::AWTransferMode
+  public var deleteAfterTransfer: Swift::Bool
+  public func transferData(sensors: [com_awareframework_ios_core::AwareSensor], completion: (((any Swift::Error)?) -> Swift::Void)? = nil)
+  public func cancel()
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+@_Concurrency::MainActor @preconcurrency public struct AWDataTransferProgressView : SwiftUICore::View {
+  @SwiftUICore::ObservedObject<com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager> @_projectedValueProperty($manager) @_Concurrency::MainActor @preconcurrency public var manager: com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  @_Concurrency::MainActor @preconcurrency public var $manager: SwiftUICore::ObservedObject<com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager>.SwiftUICore::Wrapper {
+    get
+  }
+  @_Concurrency::MainActor @preconcurrency public init(manager: com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager = .shared)
+  @_Concurrency::MainActor @preconcurrency public var body: some SwiftUICore::View {
+    get
+  }
+  public typealias Body = @_opaqueReturnTypeOf("$s48com_awareframework_ios_sensor_applewatch_watchOS26AWDataTransferProgressViewV4bodyQrvp", 0) __
+}
+@_Concurrency::MainActor @preconcurrency public struct AWDataTransferBadge : SwiftUICore::View {
+  @SwiftUICore::ObservedObject<com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager> @_projectedValueProperty($manager) @_Concurrency::MainActor @preconcurrency public var manager: com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  @_Concurrency::MainActor @preconcurrency public var $manager: SwiftUICore::ObservedObject<com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager>.SwiftUICore::Wrapper {
+    get
+  }
+  @_Concurrency::MainActor @preconcurrency public init(manager: com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferManager = .shared)
+  @_Concurrency::MainActor @preconcurrency public var body: some SwiftUICore::View {
+    get
+  }
+  public typealias Body = @_opaqueReturnTypeOf("$s48com_awareframework_ios_sensor_applewatch_watchOS19AWDataTransferBadgeV4bodyQrvp", 0) __
+}
+
+
+@objc public class AWDeviceSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWDeviceSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var pairedDeviceIdReceivedHandler: ((Swift::String) -> Swift::Void)?
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWDeviceSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWDeviceSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWDeviceSensor {
+  public static func getPairedDeviceId() -> Swift::String?
+  public static func setPairedDeviceId(_ deviceId: Swift::String)
+}
+@objc public class AWHeadingSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  final public let locationManager: CoreLocation::CLLocationManager
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint]> @_projectedValueProperty($headings) public var headings: [com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $headings: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingSensor : CoreLocation::CLLocationManagerDelegate {
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didUpdateHeading newHeading: CoreLocation::CLHeading)
+  @objc dynamic public func locationManagerShouldDisplayHeadingCalibration(_ manager: CoreLocation::CLLocationManager) -> Swift::Bool
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didFailWithError error: any Swift::Error)
+  @objc dynamic public func locationManagerDidChangeAuthorization(_ manager: CoreLocation::CLLocationManager)
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didChangeAuthorization status: CoreLocation::CLAuthorizationStatus)
+}
+@objc public class AWHeartRateSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateLinePoint]> @_projectedValueProperty($heartrates) public var heartrates: [com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateLinePoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $heartrates: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateLinePoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWHeartRateSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+public struct AWHeartRateLinePoint {
+  public var date: Foundation::Date
+  public var value: Swift::Double
+}
+@objc public class AWLocationSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  final public let locationManager: CoreLocation::CLLocationManager
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint]> @_projectedValueProperty($geomagnetisms) public var geomagnetisms: [com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $geomagnetisms: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWHeadingPoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWLocationPoint]> @_projectedValueProperty($locations) public var locations: [com_awareframework_ios_sensor_applewatch_watchOS::AWLocationPoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $locations: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWLocationPoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWLocationSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWLocationSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWLocationSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWLocationSensor : CoreLocation::CLLocationManagerDelegate {
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didUpdateLocations locations: [_LocationEssentials::CLLocation])
+  @objc dynamic public func locationManagerShouldDisplayHeadingCalibration(_ manager: CoreLocation::CLLocationManager) -> Swift::Bool
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didFailWithError error: any Swift::Error)
+  @objc dynamic public func locationManagerDidChangeAuthorization(_ manager: CoreLocation::CLLocationManager)
+  @objc dynamic public func locationManager(_ manager: CoreLocation::CLLocationManager, didChangeAuthorization status: CoreLocation::CLAuthorizationStatus)
+}
+public struct AWLocationPoint {
+  public var date: Foundation::Date
+  public var value: _LocationEssentials::CLLocation
+}
+public struct AWHeadingPoint {
+  public var date: Foundation::Date
+  public var value: CoreLocation::CLHeading
+}
+public struct AWRotationLinePoint {
+  public var date: Foundation::Date
+  public var x: Swift::Double
+  public var y: Swift::Double
+  public var z: Swift::Double
+}
+public struct AWAccelerationLinePoint {
+  public var date: Foundation::Date
+  public var x: Swift::Double
+  public var y: Swift::Double
+  public var z: Swift::Double
+}
+@objc public class AWMotionSensor : com_awareframework_ios_core::AwareSensor, Foundation::ObservableObject {
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWAccelerationLinePoint]> @_projectedValueProperty($accelerations) public var accelerations: [com_awareframework_ios_sensor_applewatch_watchOS::AWAccelerationLinePoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $accelerations: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWAccelerationLinePoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  @Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWRotationLinePoint]> @_projectedValueProperty($motions) public var motions: [com_awareframework_ios_sensor_applewatch_watchOS::AWRotationLinePoint] {
+    get
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    set
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    _modify
+  }
+  public var $motions: Combine::Published<[com_awareframework_ios_sensor_applewatch_watchOS::AWRotationLinePoint]>.Combine::Publisher {
+    get
+    @available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, *)
+    set
+  }
+  public var CONFIG: com_awareframework_ios_sensor_applewatch_watchOS::AWMotionSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config
+  @_inheritsConvenienceInitializers public class Config : com_awareframework_ios_core::SensorConfig {
+    public var motionSensorHz: Swift::Int
+    public var saveIntervalSeconds: Swift::Int
+    public var activateAccelerometerSensor: Swift::Bool
+    public var activateGyroscopeSensor: Swift::Bool
+    public var activateMagnetometerSensor: Swift::Bool
+    public var activateDeviceMotionSensor: Swift::Bool
+    override public init()
+    override public func set(config: Swift::Dictionary<Swift::String, Any>)
+    public func apply(closure: (_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWMotionSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config) -> Swift::Void) -> Self
+    @objc deinit
+  }
+  public init(_ config: com_awareframework_ios_sensor_applewatch_watchOS::AWMotionSensor.com_awareframework_ios_sensor_applewatch_watchOS::Config)
+  override public func start()
+  override public func stop()
+  @objc override public func sync(force: Swift::Bool = false)
+  public typealias ObjectWillChangePublisher = Combine::ObservableObjectPublisher
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class AWSensorManager : ObjectiveC::NSObject {
+  public static let shared: com_awareframework_ios_sensor_applewatch_watchOS::AWSensorManager
+  public var sensors: [com_awareframework_ios_core::AwareSensor]
+  public var debug: Swift::Bool
+  public func set(sensors: [com_awareframework_ios_core::AwareSensor], _ handler: (() -> Swift::Void)?)
+  public func clear(_ handler: (() -> Swift::Void)?)
+  public func start(backgroundSessionType: com_awareframework_ios_sensor_applewatch_shared::AWBackgroundSessionType = .none, _ handler: (() -> Swift::Void)?)
+  public func start(useWorkoutSession: Swift::Bool = false, _ handler: (() -> Swift::Void)?)
+  public func stop(_ handler: (() -> Swift::Void)?)
+  public func sync(force: Swift::Bool = false, dbHost: Swift::String? = nil)
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWSensorManager : HealthKit::HKWorkoutSessionDelegate {
+  @objc dynamic public func workoutSession(_ workoutSession: HealthKit::HKWorkoutSession, didChangeTo toState: HealthKit::HKWorkoutSessionState, from fromState: HealthKit::HKWorkoutSessionState, date: Foundation::Date)
+  @objc dynamic public func workoutSession(_ workoutSession: HealthKit::HKWorkoutSession, didFailWithError error: any Swift::Error)
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWSensorManager {
+  public func requestPermissionNotification(completion: @escaping (Swift::Bool, (any Swift::Error)?) -> Swift::Void)
+  public func requestPermissionHealthKit(completion: @escaping (Swift::Bool, (any Swift::Error)?) -> Swift::Void)
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWSensorManager {
+  public func transferAllData(deleteAfterTransfer: Swift::Bool = false, completion: (((any Swift::Error)?) -> Swift::Void)? = nil)
+  public func transferIncrementalData(deleteAfterTransfer: Swift::Bool = false, completion: (((any Swift::Error)?) -> Swift::Void)? = nil)
+}
+@_hasMissingDesignatedInitializers public class FileTransferManager {
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class AWWCSessionManager : ObjectiveC::NSObject, WatchConnectivity::WCSessionDelegate {
+  public static let shared: com_awareframework_ios_sensor_applewatch_watchOS::AWWCSessionManager
+  public var sessionStateChangeHandler: ((_ session: WatchConnectivity::WCSession, _ activationState: WatchConnectivity::WCSessionActivationState) -> Swift::Void)?
+  public var messageHandler: ((_ message: [Swift::String : Any]) -> Swift::Void)?
+  public var fileTransferCompletionHandler: ((_ fileTransfer: WatchConnectivity::WCSessionFileTransfer, _ error: (any Swift::Error)?) -> Swift::Void)?
+  public var DEBUG: Swift::Bool
+  public func getSettings(_ handler: (([Swift::String : Any]) -> Swift::Void)?)
+  public func applyiPhoneSettings(completion: (([Swift::String : Any]) -> Swift::Void)? = nil)
+  public func getPairedDeviceId(_ handler: @escaping (Swift::String?) -> Swift::Void)
+  public func communicationDebugStatus() -> com_awareframework_ios_sensor_applewatch_shared::AWCommunicationDebugStatus
+  @objc public func session(_ session: WatchConnectivity::WCSession, activationDidCompleteWith activationState: WatchConnectivity::WCSessionActivationState, error: (any Swift::Error)?)
+  @objc public func session(_ session: WatchConnectivity::WCSession, didFinish fileTransfer: WatchConnectivity::WCSessionFileTransfer, error: (any Swift::Error)?)
+  @objc public func session(_ session: WatchConnectivity::WCSession, didReceiveMessage message: [Swift::String : Any])
+  @objc public func session(_ session: WatchConnectivity::WCSession, didReceiveMessage message: [Swift::String : Any], replyHandler: @escaping ([Swift::String : Any]) -> Swift::Void)
+  @objc deinit
+}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCyclePhase : Swift::Equatable {}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWAudioDutyCyclePhase : Swift::Hashable {}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWTransferMode : Swift::Equatable {}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWTransferMode : Swift::Hashable {}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferProgressView : Swift::Sendable {}
+extension com_awareframework_ios_sensor_applewatch_watchOS::AWDataTransferBadge : Swift::Sendable {}
