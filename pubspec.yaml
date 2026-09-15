@@ -5,7 +5,7 @@ homepage: https://github.com/carp-dk/carp.sensing-flutter
 repository: https://github.com/carp-dk/carp_aware_package
 issue_tracker: https://github.com/cph-cachet/carp.sensing-flutter/issues
 
-documentation: https://docs.carp.dk/carp-mobile-sensing/
+documentation: https://docs.carp.dk/packages/apple-watch/
 topics:
   - mobile-sensing
   - mobile-health
