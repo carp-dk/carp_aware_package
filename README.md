@@ -7,6 +7,7 @@
 [![Documentation](https://img.shields.io/badge/Docs-docs.carp.dk-0A66C2?logo=readthedocs&logoColor=white)](https://docs.carp.dk/carp-mobile-sensing/)
 [![arXiv](https://img.shields.io/badge/arXiv-2006.11904-green.svg)](https://arxiv.org/abs/2006.11904)
 [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/SaePJ7MnQr)
+[![Docs](https://img.shields.io/badge/Docs-docs.carp.dk-0A66C2?logo=readthedocs&logoColor=white)](https://docs.carp.dk/packages/apple-watch/)
 
 This library contains a sampling package for collecting **passive sensor data from an Apple Watch**,
 to work with the [`carp_mobile_sensing`](https://pub.dev/packages/carp_mobile_sensing) (CAMS) framework.
@@ -90,10 +91,7 @@ dependencies:
 
 ### Android Integration
 
-Not supported. The AWARE watchOS framework is an Apple-only framework.
-
-If your app also runs on Android, registering this package is harmless - the probes simply never
-produce data, and the `AppleWatchDeviceManager` reports that it cannot connect.
+Not supported.
 
 ### iOS Integration
 
@@ -126,13 +124,13 @@ platform :ios, '16.0'
 that does the collecting is a watchOS target inside your Flutter app's Xcode project, and you have to
 add it yourself.
 
-👉 **[Follow the watchOS app setup guide](doc/watchos_app_setup.md)** - it walks through adding the
+👉 **[Follow the watchOS app setup guide](https://docs.carp.dk/packages/apple-watch/)** - it walks through adding the
 target, wiring up the AWARE framework, setting capabilities and permissions, and includes the
 complete watch app source code, ready to paste in.
 
 ### How the AWARE framework is shipped
 
-The AWARE watchOS framework is **not** a source dependency of this package. It is compiled ahead of
+The AWARE watchOS framework is not a source dependency of this package. It is compiled ahead of
 time into XCFrameworks that live in `ios/carp_aware_package/Frameworks` and are published together
 with the plugin, so building an app against `carp_aware_package` never needs access to the AWARE
 source:
@@ -142,17 +140,6 @@ source:
 | `com_awareframework_ios_sensor_applewatch_shared` | the iOS app *and* the watch app |
 | `com_awareframework_ios_sensor_applewatch_iOS` | the iOS side of this plugin, via `carp-aware-package` |
 | `com_awareframework_ios_sensor_applewatch_watchOS` | the companion watch app, via `carp-aware-watch` |
-
-They hold static libraries, so the open-source packages AWARE builds on
-(`com.awareframework.ios.core`, [GRDB](https://github.com/groue/GRDB.swift) and
-[DataCompression](https://github.com/mw99/DataCompression)) are deliberately *not* baked into them.
-SwiftPM resolves those the usual way, which keeps exactly one copy of each in your app - it has to,
-because the AWARE API uses `GRDB.DatabaseQueue` in public signatures.
-
-`ios/carp_aware_package/Frameworks/BUILD-INFO.txt` records the AWARE revision, the Xcode release and
-the dependency versions each build came from. Swift reads a pre-compiled module with the compiler
-that produced it or a newer one, never an older one, so your Xcode has to be at least the one named
-there.
 
 To rebuild the binaries - after bumping AWARE, or to produce them with a different Xcode - check this
 package out with its submodule and run:
