@@ -1,3 +1,13 @@
+## 1.1.0
+
+* depends on the [AWARE watchOS](https://github.com/awareframework/com.awareframework.ios.sensor.applewatch)
+  Swift package directly, instead of shipping it as pre-compiled XCFramework
+* no longer requires Xcode 27, the release the 1.0.0 binaries were compiled with - Xcode 16 or later
+  is enough
+* the iOS app now needs an `NSMicrophoneUsageDescription` in its `Info.plist`, due to AWARE's watch-side code being compiled into it as well
+* `import CarpAwareWatch` now also brings in `com_awareframework_ios_core`
+* removes the `tool/build_xcframeworks.sh` and the AWARE git submodule
+
 ## 1.0.0
 
 Initial release of the CARP AWARE Apple Watch sampling package.

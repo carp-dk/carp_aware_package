@@ -97,8 +97,8 @@ Not supported.
 
 Three things are needed, in this order:
 
-**1. Swift Package Manager.** The AWARE watchOS framework reaches your app as pre-compiled
-XCFrameworks carried by this plugin, which are wired up through SwiftPM. There is no CocoaPods
+**1. Swift Package Manager.** The AWARE watchOS framework is a Swift package, which this plugin
+depends on directly - Xcode fetches it from GitHub when it resolves the plugin. There is no CocoaPods
 podspec. Enable SwiftPM once per machine:
 
 ```bash
@@ -128,26 +128,29 @@ add it yourself.
 target, wiring up the AWARE framework, setting capabilities and permissions, and includes the
 complete watch app source code, ready to paste in.
 
-### How the AWARE framework is shipped
+### How the AWARE framework is included
 
-The AWARE watchOS framework is not a source dependency of this package. It is compiled ahead of
-time into XCFrameworks that live in `ios/carp_aware_package/Frameworks` and are published together
-with the plugin, so building an app against `carp_aware_package` never needs access to the AWARE
-source:
+The AWARE watchOS framework is the open-source Swift package
+[`com.awareframework.ios.sensor.applewatch`](https://github.com/awareframework/com.awareframework.ios.sensor.applewatch),
+which this plugin declares as a SwiftPM dependency. Xcode fetches it from GitHub and builds it from
+source together with the plugin, which needs Xcode 16 or later. Its single product contains all three
+AWARE modules:
 
-| XCFramework | Linked by |
+| Module | Used by |
 |---|---|
 | `com_awareframework_ios_sensor_applewatch_shared` | the iOS app *and* the watch app |
 | `com_awareframework_ios_sensor_applewatch_iOS` | the iOS side of this plugin, via `carp-aware-package` |
 | `com_awareframework_ios_sensor_applewatch_watchOS` | the companion watch app, via `carp-aware-watch` |
 
-To rebuild the binaries - after bumping AWARE, or to produce them with a different Xcode - check this
-package out with its submodule and run:
+The iOS app and the watch app link the same AWARE package, so the phone and the watch always run the
+same AWARE release. This plugin pins that release exactly - currently AWARE 1.6.0 - so a newer AWARE
+reaches your app only through a new release of this plugin.
 
-```bash
-git submodule update --init
-tool/build_xcframeworks.sh
-```
+Because that one product also contains the watch-side module, the watch-side code is compiled into
+the iOS app too, where it is never used. It references the microphone permission API, so App Store
+Connect rejects an upload of the iOS app without an `NSMicrophoneUsageDescription` in its
+`Info.plist` (`ITMS-90683`) - see Step 8 of the
+[watchOS app setup guide](doc/watchos_app_setup.md#step-8--background-modes-and-privacy-strings).
 
 ## Using it
 

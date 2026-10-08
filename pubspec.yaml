@@ -1,5 +1,5 @@
 name: carp_aware_package
-version: 1.0.0
+version: 1.1.0
 description: The CARP AWARE sampling package. Samples passive sensor data from an Apple Watch (watchOS) using the AWARE watchOS sensing framework.
 homepage: https://github.com/carp-dk/carp.sensing-flutter
 repository: https://github.com/carp-dk/carp_aware_package

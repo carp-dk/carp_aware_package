@@ -1,11 +1,12 @@
-# The AWARE watchOS framework is vendored as a git submodule so that its source
-# is available when rebuilding the XCFrameworks under
-# ios/carp_aware_package/Frameworks - see tool/build_xcframeworks.sh. The
-# published package ships those compiled binaries, never the AWARE source.
-com.awareframework.ios.sensor.applewatch/
+# pub reads this file instead of .gitignore when publishing. It is kept because
+# .gitignore re-includes /pubspec.lock (`!/pubspec.lock`), which pub would then
+# publish.
 
-# Intermediates of tool/build_xcframeworks.sh. The XCFrameworks it produces are
-# published; everything it needed to get there is not.
+# The AWARE framework used to be a git submodule at this path, and a plain
+# `git pull` can leave an old checkout of it behind. Never publish that.
+/com.awareframework.ios.sensor.applewatch/
+
+# Swift Package Manager build output.
 .build/
 
 # Everything below mirrors .gitignore, which .pubignore replaces.

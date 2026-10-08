@@ -3,23 +3,21 @@
 
 import PackageDescription
 
-// The AWARE Apple Watch framework is shipped with this plugin as pre-compiled
-// XCFrameworks in `Frameworks/`, built by `tool/build_xcframeworks.sh`. Its
-// source is not distributed.
+// The AWARE Apple Watch framework is an ordinary Swift package dependency, which
+// Swift Package Manager fetches from GitHub together with this plugin.
 //
-// The XCFrameworks contain static libraries, so the open-source packages AWARE
-// links against are *not* baked into them - they are declared as ordinary
-// dependencies below. That keeps exactly one copy of each in the app, which
-// matters because the AWARE API exposes `GRDB.DatabaseQueue` in public
-// signatures.
+// AWARE exposes a single product containing all three of its modules -
+// `com_awareframework_ios_sensor_applewatch_shared`, `..._iOS`, and
+// `..._watchOS` - and that product builds for both iOS and watchOS. The iOS
+// side of this plugin and the companion watch app therefore link the same
+// package, and since SwiftPM resolves one version of a package for the whole
+// app, the phone and the watch always run the same AWARE release.
 //
-// The module names are the ones SwiftPM derived from the AWARE target names, so
-// `import com_awareframework_ios_sensor_applewatch_shared` and friends resolve
-// against the binaries exactly as they did against the sources.
-let awareShared = "com_awareframework_ios_sensor_applewatch_shared"
-let awareIOS = "com_awareframework_ios_sensor_applewatch_iOS"
-let awareWatchOS = "com_awareframework_ios_sensor_applewatch_watchOS"
-
+// That product is all-or-nothing, so the iOS app links the `..._watchOS` module
+// as well. Most of its sources are not wrapped in `#if os(watchOS)`, so its
+// audio code - including `AVAudioSession.requestRecordPermission` - ends up,
+// unused, in the iOS binary. That is why the Runner target needs an
+// NSMicrophoneUsageDescription (doc/watchos_app_setup.md, Step 8).
 let package = Package(
     name: "carp_aware_package",
     platforms: [
@@ -38,49 +36,49 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
+        // Pinned exactly: AWARE has renamed public types (1.2.2) and database
+        // tables (1.3.0) within 1.x, and the Dart side of this plugin matches
+        // records by those table names (`AppleWatchTable`), so a rename would
+        // silently drop data. Bump deliberately, together with
+        // `CarpAwareWatch.awareVersion`, after re-testing.
+        .package(
+            url: "https://github.com/awareframework/com.awareframework.ios.sensor.applewatch.git",
+            exact: "1.6.0"
+        ),
+        // AWARE depends on this as well. It is declared here too because this
+        // plugin imports `com_awareframework_ios_core` itself, and
+        // `CarpAwareWatch` re-exports it to the watch app.
         .package(
             url: "https://github.com/awareframework/com.awareframework.ios.core.git",
             from: "1.6.0"
         ),
-        .package(url: "https://github.com/mw99/DataCompression.git", from: "3.8.0"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", from: "7.3.0"),
     ],
     targets: [
-        .binaryTarget(name: awareShared, path: "Frameworks/\(awareShared).xcframework"),
-        .binaryTarget(name: awareIOS, path: "Frameworks/\(awareIOS).xcframework"),
-        .binaryTarget(name: awareWatchOS, path: "Frameworks/\(awareWatchOS).xcframework"),
-
         // The iOS side of the plugin - the Flutter method channel and the
         // AWARE sensor running on the phone.
         .target(
             name: "carp_aware_package",
             dependencies: [
                 .product(name: "FlutterFramework", package: "FlutterFramework"),
-                .target(name: awareShared),
-                .target(name: awareIOS),
+                .product(
+                    name: "com.awareframework.ios.sensor.applewatch",
+                    package: "com.awareframework.ios.sensor.applewatch"
+                ),
                 .product(name: "com.awareframework.ios.core", package: "com.awareframework.ios.core"),
-                .product(name: "DataCompression", package: "DataCompression"),
-                .product(name: "GRDB", package: "GRDB.swift"),
             ]
         ),
 
         // The watchOS side. This target carries no logic - it exists so that
-        // the watch app can link one product and get the AWARE watchOS modules
-        // together with everything they need at link time.
-        //
-        // Each of the two targets above depends on the binaries of one platform
-        // only, so building this package as a whole for a single platform will
-        // fail on the other target. That is fine in practice: an app builds
-        // `carp-aware-package` for iOS and `carp-aware-watch` for watchOS, and
-        // never both for the same destination.
+        // the watch app can link one product of this plugin and get the AWARE
+        // watchOS modules in the very version the iOS side was resolved with.
         .target(
             name: "CarpAwareWatch",
             dependencies: [
-                .target(name: awareShared),
-                .target(name: awareWatchOS),
+                .product(
+                    name: "com.awareframework.ios.sensor.applewatch",
+                    package: "com.awareframework.ios.sensor.applewatch"
+                ),
                 .product(name: "com.awareframework.ios.core", package: "com.awareframework.ios.core"),
-                .product(name: "DataCompression", package: "DataCompression"),
-                .product(name: "GRDB", package: "GRDB.swift"),
             ]
         ),
     ]

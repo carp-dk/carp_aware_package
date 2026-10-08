@@ -34,10 +34,10 @@ walks through adding it.
 Runner.xcodeproj
 ├── Runner                (iOS app)      ← your Flutter app
 │   └── carp_aware_package plugin        ← added by `flutter pub get`, via SwiftPM
-│       └── carp-aware-package           ← AWARE iOS binaries, bundled with the plugin
+│       └── carp-aware-package           ← links the AWARE Swift package (iOS side)
 │
 └── CarpWatch Watch App   (watchOS app)  ← you add this in Step 4
-    └── carp-aware-watch                 ← AWARE watchOS binaries, same plugin
+    └── carp-aware-watch                 ← same plugin, same AWARE package (watch side)
 ```
 
 At runtime:
@@ -65,7 +65,7 @@ protocol.
 
 ## 2. Prerequisites
 
-Requires minimum iOS 16 and watchOS 8.0
+Requires minimum iOS 16 and watchOS 8.0, and Xcode 16 or later to build.
 
 You also need **physical devices**: an iPhone with a paired Apple Watch. The simulator cannot pair a
 watch to a phone in a way that makes `WatchConnectivity` file transfers work end-to-end, and heart
@@ -147,9 +147,10 @@ open ios/Runner.xcworkspace
 Confirm the plugin arrived: in the Project navigator you should see **Package Dependencies** →
 `FlutterGeneratedPluginSwiftPackage`, and under it `carp_aware_package`.
 
-The AWARE framework itself is **not** listed as a package. It ships with the plugin as pre-compiled
-XCFrameworks, so the only AWARE-related packages you see are the open-source ones those binaries link
-against: `com.awareframework.ios.core`, `GRDB`, and `DataCompression`.
+Xcode also resolves the packages the plugin depends on, so the list includes the AWARE framework
+itself — `com.awareframework.ios.sensor.applewatch` — together with the open-source packages it builds
+on, such as `com.awareframework.ios.core`, `GRDB`, and `DataCompression`. They are fetched from GitHub
+the first time Xcode resolves the project, so that first resolve needs network access.
 
 ## Step 4 — Add the watchOS app target
 
@@ -193,9 +194,9 @@ need a second provisioning profile for the watch app bundle id.
 
 ## Step 6 — Add the AWARE framework to the watch target
 
-The AWARE framework ships inside `carp_aware_package` as **pre-compiled XCFrameworks**. There is no
-package URL to add and no AWARE source to check out — Xcode resolved it along with the plugin in
-Step 3, so all that is left is to link it into the watch target.
+`carp_aware_package` already depends on the AWARE Swift package. There is no package URL to add —
+Xcode resolved AWARE along with the plugin in Step 3, so all that is left is to link it into the watch
+target.
 
 1. Select the **`CarpWatch Watch App`** target → **General**.
 2. Under **Frameworks, Libraries, and Embedded Content**, press **+**.
@@ -203,13 +204,12 @@ Step 3, so all that is left is to link it into the watch target.
 
 That one product brings in both AWARE watch modules —
 `com_awareframework_ios_sensor_applewatch_shared` and
-`com_awareframework_ios_sensor_applewatch_watchOS` — together with the open-source packages they were
-compiled against. The binaries are static libraries, so there is nothing to embed and nothing to
-sign; leave it on **Do Not Embed** if Xcode offers the choice.
+`com_awareframework_ios_sensor_applewatch_watchOS` — together with the packages they depend on, in the
+same AWARE version the iOS side of the plugin uses. All of them are linked statically, so there is
+nothing to embed and nothing to sign; leave it on **Do Not Embed** if Xcode offers the choice.
 
-> ⚠️ **Do not add `carp-aware-watch` to the `Runner` target.** The iOS side of the plugin links its
-> own AWARE binaries through `carp-aware-package`. Adding the watch product to the app as well gives
-> you two copies of the same modules.
+> ⚠️ **Do not add `carp-aware-watch` to the `Runner` target.** It is meant for the watch app only —
+> the iOS side of the plugin already links AWARE through `carp-aware-package`.
 
 Also make sure the watch target's **Minimum Deployments** is **watchOS 8.0 or later** (General tab).
 
@@ -240,7 +240,8 @@ This writes `CarpWatch Watch App.entitlements`:
 
 > You do **not** need HealthKit, microphone, or location capabilities on the `Runner` (iOS) target.
 > The phone only receives already-collected files. Adding capabilities you do not use only makes App
-> Review harder.
+> Review harder. `Runner` does need at least one privacy string, though — see the end of
+> [Step 8](#step-8--background-modes-and-privacy-strings).
 
 ## Step 8 — Background modes and privacy strings
 
@@ -280,8 +281,17 @@ Be honest and specific in these strings — participants read them, and App Revi
 particular, say plainly that no audio is stored, since that is the question the microphone prompt
 raises.
 
-> **Also add these to the iOS `Runner` target** if your Flutter app itself uses the corresponding
-> sensors through other CARP sampling packages. They are separate plists.
+> **Add `NSMicrophoneUsageDescription` to the iOS `Runner` target as well**, even though the phone
+> never records audio. AWARE ships its iOS and watchOS code as one Swift package product, so its
+> watch-side audio code — which references `AVAudioSession.requestRecordPermission` — is compiled into
+> the iOS app too, and App Store Connect rejects an upload whose binary references a microphone API
+> without a purpose string (`ITMS-90683`). The phone never shows this prompt, so a plain statement
+> works, e.g. "The microphone is only used by the Apple Watch app, to measure the noise level around
+> you." HealthKit is linked into the iOS app for the same reason; if App Store Connect also asks for
+> `NSHealthShareUsageDescription` and `NSHealthUpdateUsageDescription`, add those too.
+>
+> Add the other keys above to `Runner` only if your Flutter app itself uses the corresponding sensors
+> through other CARP sampling packages, or App Store Connect asks for them. They are separate plists.
 
 ## Step 9 — The watch app source code
 
@@ -770,21 +780,23 @@ The Runner target's deployment target is below 16.0. Redo [Step 2](#step-2--rais
 — all three places — then `flutter clean && flutter pub get`.
 
 **`No such module 'com_awareframework_ios_sensor_applewatch_watchOS'`**
-The AWARE binaries are not linked into the watch target. Watch target → **General** →
+AWARE is not linked into the watch target. Watch target → **General** →
 **Frameworks, Libraries, and Embedded Content** → **+** → pick `carp-aware-watch`. Note the module
 name uses `_` where the AWARE target name uses `.`, and the platform suffix is capitalised exactly as
 `watchOS`.
 
-**Duplicate symbols when linking the iOS app**
-`carp-aware-watch` was added to the `Runner` target as well as to the watch target. Remove it from
-`Runner` — the plugin already links the iOS AWARE binaries through `carp-aware-package`. See
-[Step 6](#step-6--add-the-aware-framework-to-the-watch-target).
+**Xcode cannot resolve the AWARE packages**
+`com.awareframework.ios.sensor.applewatch` and the packages it builds on (`com.awareframework.ios.core`,
+`GRDB.swift`, `DataCompression`, …) are fetched from GitHub the first time Xcode resolves the project.
+Check that the machine — or CI runner — can reach github.com, then retry: **File → Packages → Reset
+Package Caches** in Xcode, or a clean build on CI. An error about an incompatible Swift tools version
+means Xcode is too old for one of these packages: AWARE needs Xcode 16 or later, and GRDB.swift 7.9 or
+later — which a `Package.resolved` written by a newer Xcode may pin — needs Xcode 16.3.
 
-**`failed to build module 'com_awareframework_ios_sensor_applewatch_shared'`**
-Swift can read a pre-compiled module with the compiler that produced it or a newer one, never an
-older one. Check which Xcode built the binaries in
-`ios/carp_aware_package/Frameworks/BUILD-INFO.txt` and update Xcode to at least that release — or
-rebuild them yourself with `tool/build_xcframeworks.sh` from a checkout of this package.
+**App Store Connect rejects the iOS app with `ITMS-90683: Missing purpose string in Info.plist`**
+The AWARE watch-side code compiled into the iOS app references the microphone, and links HealthKit.
+Add the purpose strings App Store Connect names to the `Runner` target's `Info.plist` — see the end of
+[Step 8](#step-8--background-modes-and-privacy-strings).
 
 **The watch app builds but never sends anything**
 * Did you press **Start** on the watch at least once?
