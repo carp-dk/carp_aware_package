@@ -1,3 +1,7 @@
+## 1.2.0
+
+* upgrade to `carp_core` ^3.0.0 and `carp_mobile_sensing` ^3.0.0
+
 ## 1.1.0
 
 * depends on the [AWARE watchOS](https://github.com/awareframework/com.awareframework.ios.sensor.applewatch)
